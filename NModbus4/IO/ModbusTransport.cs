@@ -122,37 +122,42 @@ namespace Modbus.IO
                     {
                         Write(message);
 
-                        bool readAgain;
-                        do
+                        // Broadcast messages (Slave Adress = 0) trigger no response and thus there is nothing to read.
+                        if (message.SlaveAddress != 0)
                         {
-                            readAgain = false;
-                            response = ReadResponse<T>();
+                            bool readAgain;
+                            do
+                            {
+                                readAgain = false;
+                                response = ReadResponse<T>();
 
-                            var exceptionResponse = response as SlaveExceptionResponse;
-                            if (exceptionResponse != null)
-                            {
-                                // if SlaveExceptionCode == ACKNOWLEDGE we retry reading the response without resubmitting request
-                                readAgain = exceptionResponse.SlaveExceptionCode == Modbus.Acknowledge;
-                                if (readAgain)
+                                var exceptionResponse = response as SlaveExceptionResponse;
+                                if (exceptionResponse != null)
                                 {
-                                    Debug.WriteLine(
-                                        "Received ACKNOWLEDGE slave exception response, waiting {0} milliseconds and retrying to read response.",
-                                        _waitToRetryMilliseconds);
-                                    Sleep(WaitToRetryMilliseconds);
+                                    // if SlaveExceptionCode == ACKNOWLEDGE we retry reading the response without resubmitting request
+                                    readAgain = exceptionResponse.SlaveExceptionCode == Modbus.Acknowledge;
+                                    if (readAgain)
+                                    {
+                                        Debug.WriteLine(
+                                            "Received ACKNOWLEDGE slave exception response, waiting {0} milliseconds and retrying to read response.",
+                                            _waitToRetryMilliseconds);
+                                        Sleep(WaitToRetryMilliseconds);
+                                    }
+                                    else
+                                    {
+                                        throw new SlaveException(exceptionResponse);
+                                    }
                                 }
-                                else
+                                else if (ShouldRetryResponse(message, response))
                                 {
-                                    throw new SlaveException(exceptionResponse);
+                                    readAgain = true;
                                 }
-                            }
-                            else if (ShouldRetryResponse(message, response))
-                            {
-                                readAgain = true;
-                            }
-                        } while (readAgain);
+                            } while (readAgain);
+
+                            ValidateResponse(message, response);
+                        }
                     }
 
-                    ValidateResponse(message, response);
                     success = true;
                 }
                 catch (SlaveException se)
