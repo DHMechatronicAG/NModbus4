@@ -4,7 +4,9 @@ namespace Modbus.Device
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+#if !STANDARD
     using System.IO.Ports;
+#endif
 
     using IO;
     using Message;
@@ -31,6 +33,7 @@ namespace Modbus.Device
             }
         }
 
+#if !STANDARD
         /// <summary>
         ///     Modbus ASCII slave factory method.
         /// </summary>
@@ -41,6 +44,7 @@ namespace Modbus.Device
 
             return CreateAscii(unitId, new SerialPortAdapter(serialPort));
         }
+#endif
 
         /// <summary>
         ///     Modbus ASCII slave factory method.
@@ -53,6 +57,7 @@ namespace Modbus.Device
             return new ModbusSerialSlave(unitId, new ModbusAsciiTransport(streamResource));
         }
 
+#if !STANDARD
         /// <summary>
         ///     Modbus RTU slave factory method.
         /// </summary>
@@ -63,6 +68,7 @@ namespace Modbus.Device
 
             return CreateRtu(unitId, new SerialPortAdapter(serialPort));
         }
+#endif
 
         /// <summary>
         ///     Modbus RTU slave factory method.

@@ -2,7 +2,9 @@ namespace Modbus.Device
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+#if !STANDARD
     using System.IO.Ports;
+#endif
     using System.Net.Sockets;
     using System.Threading.Tasks;
 
@@ -45,6 +47,7 @@ namespace Modbus.Device
             return CreateIp(new UdpClientAdapter(udpClient));
         }
 
+#if !STANDARD
         /// <summary>
         ///     Modbus IP master factory method.
         /// </summary>
@@ -56,6 +59,7 @@ namespace Modbus.Device
 
             return CreateIp(new SerialPortAdapter(serialPort));
         }
+#endif
 
         /// <summary>
         ///     Modbus IP master factory method.

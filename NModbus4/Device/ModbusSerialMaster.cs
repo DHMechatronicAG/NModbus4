@@ -2,7 +2,9 @@ namespace Modbus.Device
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+#if !STANDARD
     using System.IO.Ports;
+#endif
     using System.Net.Sockets;
 
     using Data;
@@ -25,6 +27,7 @@ namespace Modbus.Device
             get { return (ModbusSerialTransport) Transport; }
         }
 
+#if !STANDARD
         /// <summary>
         ///     Modbus ASCII master factory method.
         /// </summary>
@@ -35,6 +38,7 @@ namespace Modbus.Device
 
             return CreateAscii(new SerialPortAdapter(serialPort));
         }
+#endif
 
         /// <summary>
         ///     Modbus ASCII master factory method.
@@ -71,6 +75,7 @@ namespace Modbus.Device
             return new ModbusSerialMaster(new ModbusAsciiTransport(streamResource));
         }
 
+#if !STANDARD
         /// <summary>
         ///     Modbus RTU master factory method.
         /// </summary>
@@ -81,6 +86,7 @@ namespace Modbus.Device
 
             return CreateRtu(new SerialPortAdapter(serialPort));
         }
+#endif
 
         /// <summary>
         ///     Modbus RTU master factory method.

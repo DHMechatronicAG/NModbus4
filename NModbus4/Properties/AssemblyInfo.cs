@@ -1,3 +1,4 @@
+#if !STANDARD
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -21,3 +22,4 @@ using System.Runtime.InteropServices;
 //[assembly: InternalsVisibleTo(@"Modbus.UnitTests")]
 //[assembly: InternalsVisibleTo(@"DynamicProxyGenAssembly2")]
 //#endif
+#endif

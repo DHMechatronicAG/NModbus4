@@ -1,3 +1,4 @@
+#if !STANDARD
 namespace Modbus.IO
 {
     using System;
@@ -66,3 +67,4 @@ namespace Modbus.IO
         }
     }
 }
+#endif
