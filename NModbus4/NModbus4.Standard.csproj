@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE;STANDARD</DefineConstants>
+    <DefineConstants>TRACE;STANDARD</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;STANDARD</DefineConstants>
   </PropertyGroup>
 
 </Project>
